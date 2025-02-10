@@ -72,7 +72,8 @@ public class ProcessoService {
     public ProcessoDTO pesquisar(Long id) {
         Processo processo = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException(PROCESSO_NAO_ENCONTRADO));
-        return convertToDto(processo);
+        ProcessoDTO processoDTO = convertToDto(processo);
+        return processoDTO;
     }
     
     public ProcessoPaginadosDTO getProcessosPaginadosEOrdenadosPorQuery(RequestPageDTO dto) {
