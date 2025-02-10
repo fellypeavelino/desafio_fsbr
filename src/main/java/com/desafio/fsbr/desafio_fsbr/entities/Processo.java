@@ -32,9 +32,10 @@ public class Processo {
     @Column(nullable = false, unique = true, length = 25)
     private String npu;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "data_cadastro", nullable = false, updatable = false)
     private LocalDateTime dataCadastro;
 
+    @Column(name = "data_visualizacao")
     private LocalDateTime dataVisualizacao;
 
     @Column(nullable = false)
