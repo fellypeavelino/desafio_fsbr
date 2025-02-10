@@ -26,5 +26,5 @@ public class ProcessoDTO {
     @NotNull(message = "O campo 'uf' não pode ser nulo.")
     private String uf;
     @NotNull(message = "O campo 'usuario_id' não pode ser nulo.")
-    private Integer usuario_id;
+    private Long usuario_id;
 }
