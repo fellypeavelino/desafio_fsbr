@@ -13,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import util.JwtUtil;
+import com.desafio.fsbr.desafio_fsbr.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -22,6 +23,9 @@ import util.JwtUtil;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
+    
+    @Autowired
+    private JwtUtil jwtUtil;
     
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -45,7 +49,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     
     private boolean validarToken(String authHeader, HttpServletResponse response) throws IOException {
         try { 
-            JwtUtil jwtUtil = new JwtUtil();
             String sub = jwtUtil.decodeToken(authHeader);
             return sub.equals("fsbr");
         } catch (Exception e) {
