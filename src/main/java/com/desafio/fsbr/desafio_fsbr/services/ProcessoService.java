@@ -4,15 +4,20 @@
  */
 package com.desafio.fsbr.desafio_fsbr.services;
 
+import com.desafio.fsbr.desafio_fsbr.dtos.DocumentoPdfDTO;
 import com.desafio.fsbr.desafio_fsbr.dtos.ProcessoDTO;
 import com.desafio.fsbr.desafio_fsbr.dtos.ProcessoPaginadosDTO;
 import com.desafio.fsbr.desafio_fsbr.dtos.RequestPageDTO;
+import com.desafio.fsbr.desafio_fsbr.entities.DocumentoPdf;
 import com.desafio.fsbr.desafio_fsbr.entities.Processo;
 import com.desafio.fsbr.desafio_fsbr.entities.Usuario;
+import com.desafio.fsbr.desafio_fsbr.repositories.DocumentoPdfRepository;
 import com.desafio.fsbr.desafio_fsbr.repositories.ProcessoRepository;
 import com.desafio.fsbr.desafio_fsbr.repositories.UsuarioRepository;
+import com.desafio.fsbr.desafio_fsbr.utils.ConvertUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,20 +36,16 @@ public class ProcessoService {
     private static final String PROCESSO_NAO_ENCONTRADO = "Processo não encontrado";
     
     @Autowired
+    private ConvertUtil convert;
+    
+    @Autowired
     private ProcessoRepository repository;
     
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private DocumentoPdfRepository documentoPdfRepository;
     
-    private ProcessoDTO convertToDto(Processo processo) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(processo, ProcessoDTO.class);
-    }
-
-    private Processo convertToEntity(ProcessoDTO processoDto) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(processoDto, Processo.class);
-    }
+    @Autowired
+    private UsuarioRepository usuarioRepository;
     
     public Processo salvarContato(Processo contato, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -54,9 +55,9 @@ public class ProcessoService {
     }
 
     public ProcessoDTO salvarContatoDto(ProcessoDTO processoDto) {
-        Processo processo = convertToEntity(processoDto);
+        Processo processo = convert.convertToEntity(processoDto);
         processo = salvarContato(processo, processoDto.getUsuario_id());
-        return convertToDto(processo);
+        return convert.convertToDto(processo);
     }
 
     public ProcessoDTO alterarDto(Long id, ProcessoDTO processoDto) {
@@ -70,10 +71,20 @@ public class ProcessoService {
     }
 
     public ProcessoDTO pesquisar(Long id) {
+        Processo processo = this.findById(id);
+        List<DocumentoPdf> documentos = documentoPdfRepository.findByProcesso(processo);
+        List<DocumentoPdfDTO> documentosDto = documentos.stream()
+            .map(o -> convert.convertToDto(o))
+            .collect(Collectors.toList());
+        ProcessoDTO processoDTO = convert.convertToDto(processo);
+        processoDTO.setDocumentosDto(documentosDto);
+        return processoDTO;
+    }
+
+    public Processo findById(Long id) {
         Processo processo = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException(PROCESSO_NAO_ENCONTRADO));
-        ProcessoDTO processoDTO = convertToDto(processo);
-        return processoDTO;
+        return processo;
     }
     
     public ProcessoPaginadosDTO getProcessosPaginadosEOrdenadosPorQuery(RequestPageDTO dto) {
@@ -104,7 +115,7 @@ public class ProcessoService {
     
     private List<ProcessoDTO> convertToListDto(List<Processo> contatos) {
         List<ProcessoDTO> listResult = new ArrayList<>();
-        contatos.forEach(c -> listResult.add(this.convertToDto(c)));
+        contatos.forEach(c -> listResult.add(convert.convertToDto(c)));
         return listResult;
     }
 }

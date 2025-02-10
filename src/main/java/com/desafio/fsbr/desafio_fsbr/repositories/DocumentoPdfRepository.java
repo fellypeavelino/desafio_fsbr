@@ -5,6 +5,8 @@
 package com.desafio.fsbr.desafio_fsbr.repositories;
 
 import com.desafio.fsbr.desafio_fsbr.entities.DocumentoPdf;
+import com.desafio.fsbr.desafio_fsbr.entities.Processo;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -12,5 +14,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Usuario
  */
 public interface DocumentoPdfRepository extends JpaRepository<DocumentoPdf,Long> {
-    
+    List<DocumentoPdf> findByProcesso(Processo processo);
 }
