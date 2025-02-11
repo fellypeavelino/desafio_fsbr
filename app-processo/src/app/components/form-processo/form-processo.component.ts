@@ -24,6 +24,7 @@ export class FormProcessoComponent implements OnInit {
   isEdit = false;
   processoForm!: FormGroup;
   brasilUfs:BrasilUfs = new BrasilUfs();
+  listaMunicipios!:any[];
   constructor(
     private fb: FormBuilder,
     private processoService: ProcessoService,
@@ -48,6 +49,8 @@ export class FormProcessoComponent implements OnInit {
       await this.processoService.getById(+id).then(data => this.processo = data);
       this.processoForm.patchValue(this.processo);
       this.processoForm.get('uf')?.setValue(this.processo.uf);
+      await this.ufSelecionada({value:this.processo.uf});
+      this.processoForm.get('municipio')?.setValue(this.processo.municipio);
     }
   }
 
@@ -92,6 +95,7 @@ export class FormProcessoComponent implements OnInit {
   async ufSelecionada($event:any){
     const {value} = $event;
     let list = await this.processoService.carregarMunicipiosPelaUf(value);
+    this.listaMunicipios = list;
     console.log(list);
   }
 }

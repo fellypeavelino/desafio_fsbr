@@ -15,10 +15,14 @@
             }
             </mat-select>
         </mat-form-field>
-        
+
         <mat-form-field class="full-width">
           <mat-label>Municipio</mat-label>
-          <input matInput formControlName="municipio" required />
+          <mat-select formControlName="municipio" required>
+            @for (item of listaMunicipios; track item.nome) {
+              <mat-option [value]="item.nome">{{ item.nome }}</mat-option>
+            }
+            </mat-select>
         </mat-form-field>
         <!-- Campo de Upload de PDF -->
         <div class="full-width">
