@@ -50,4 +50,8 @@ export class ProcessoService {
     const usuarioLoguin = localStorage.getItem("usuarioLoguin");
     return usuarioLoguin ? JSON.parse(usuarioLoguin) as any : null;
   }
+
+  async carregarMunicipiosPelaUf(uf:string){
+    return await firstValueFrom(this.http.get<any[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`));
+  }
 }

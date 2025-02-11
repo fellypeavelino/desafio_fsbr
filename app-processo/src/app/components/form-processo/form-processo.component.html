@@ -8,19 +8,18 @@
         </mat-form-field>
   
         <mat-form-field class="full-width">
-          <mat-label>Municipio</mat-label>
-          <input matInput formControlName="municipio" required />
-        </mat-form-field>
-  
-        <mat-form-field class="full-width">
             <mat-label>UF</mat-label>
-            <mat-select formControlName="uf" required>
+            <mat-select formControlName="uf" (selectionChange)="ufSelecionada($event)" required>
             @for (item of brasilUfs.getUfs(); track item.nome) {
               <mat-option [value]="item.sigla">{{ item.nome }}</mat-option>
             }
             </mat-select>
         </mat-form-field>
-
+        
+        <mat-form-field class="full-width">
+          <mat-label>Municipio</mat-label>
+          <input matInput formControlName="municipio" required />
+        </mat-form-field>
         <!-- Campo de Upload de PDF -->
         <div class="full-width">
           <label for="file">Upload de Documento (PDF)</label>

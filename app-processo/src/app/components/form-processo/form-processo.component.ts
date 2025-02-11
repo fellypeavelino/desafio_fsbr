@@ -88,4 +88,10 @@ export class FormProcessoComponent implements OnInit {
   onFileSelected($event:any){
 
   }
+
+  async ufSelecionada($event:any){
+    const {value} = $event;
+    let list = await this.processoService.carregarMunicipiosPelaUf(value);
+    console.log(list);
+  }
 }
