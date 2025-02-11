@@ -1,1 +1,33 @@
-<p>form-processo works!</p>
+<mat-card class="login-card">
+    <mat-card-title>{{ isEdit ? 'Editar Processo' : 'Novo Processo' }}</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="processoForm" (ngSubmit)="salvar()" class="vertical-form">
+        <mat-form-field class="full-width">
+          <mat-label>Numero</mat-label>
+          <input matInput formControlName="npu" required />
+        </mat-form-field>
+  
+        <mat-form-field class="full-width">
+          <mat-label>Municipio</mat-label>
+          <input matInput formControlName="municipio" required />
+        </mat-form-field>
+  
+        <mat-form-field class="full-width">
+            <mat-label>UF</mat-label>
+            <mat-select formControlName="uf" required>
+            @for (item of brasilUfs.getUfs(); track item.nome) {
+              <mat-option [value]="item.sigla">{{ item.nome }}</mat-option>
+            }
+            </mat-select>
+          </mat-form-field>
+  
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="processoForm.invalid">
+            {{isEdit ? 'Editar' : 'Salvar' }}
+          </button>
+          &nbsp;
+          <button mat-raised-button color="warn" type="button" (click)="cancelar()">Cancelar</button>
+        </div>
+      </form>
+    </mat-card-content>
+</mat-card>
