@@ -11,6 +11,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {FormBuilder,FormGroup,Validators,ReactiveFormsModule} from "@angular/forms";
+import { LoginService } from '../../servicies/login.service';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
   @Input() usarLogout!: boolean;
 
   constructor(
+    private loginService: LoginService,
     private fb: FormBuilder,
     private guardService: GuardService,
     private router: Router
@@ -43,24 +45,24 @@ export class LoginComponent implements OnInit {
   async logar(){
     const vm = this;
     const loginForm = this.loginForm.value;
-    // this.loguinService.loguin(loginForm).then(async(data) => {
-    //   if (!data.id) {
-    //     alert("usuario ou senha não existem");
-    //     vm.guardService.logout();
-    //     localStorage.removeItem("logado");
-    //     localStorage.removeItem("usuarioLoguin");
-    //     return;
-    //   }
-    //   localStorage.setItem("logado", "true");
-    //   this.loguinService.usuarioLoguin = data;
-    //   const token = await vm.contatoService.getToken();
+    this.loginService.loguin(loginForm).then(async(data) => {
+      if (!data.id) {
+        alert("usuario ou senha não existem");
+        vm.guardService.logout();
+        localStorage.removeItem("logado");
+        localStorage.removeItem("usuarioLoguin");
+        return;
+      }
+      localStorage.setItem("logado", "true");
+      this.loginService.usuarioLoguin = data;
+      const token = await vm.loginService.getToken();
     //   vm.contatoService.usuarioLoguin = data;
-    //   localStorage.setItem("usuarioLoguin", JSON.stringify(data));
+      localStorage.setItem("usuarioLoguin", JSON.stringify(data));
     //   vm.contatoService.token = token;
-    //   localStorage.setItem("token", token);
-    //   vm.guardService.login();
-    //   vm.router.navigate([`contatos`]);
-    // });
+      localStorage.setItem("token", token);
+      vm.guardService.login();
+      vm.router.navigate([`processos`]);
+    });
   }
 
   logout(){

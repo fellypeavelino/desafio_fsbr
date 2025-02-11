@@ -4,6 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { LoadingModalComponent  } from './components/loading-modal/loading-modal.component';
 import { LoadingService } from './servicies/loading.service';
 import { Subscription } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, LoginComponent],
@@ -14,6 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
   usarLogout!: boolean;
   private subscription!: Subscription;
   constructor(
+    private modalService: NgbModal,
     private router: Router,
     private loadingServiceService: LoadingService
   ) {}
@@ -25,9 +27,9 @@ export class AppComponent implements OnInit, OnDestroy {
     });
     this.subscription = this.loadingServiceService.loading$.subscribe(loading => {
       if (loading) {
-        //this.modalService.open(LoadingModalComponent, { backdrop: 'static', keyboard: false });
+        this.modalService.open(LoadingModalComponent, { backdrop: 'static', keyboard: false });
       } else {
-        //this.modalService.dismissAll();
+        this.modalService.dismissAll();
       }
     });
   }
