@@ -19,8 +19,14 @@
               <mat-option [value]="item.sigla">{{ item.nome }}</mat-option>
             }
             </mat-select>
-          </mat-form-field>
-  
+        </mat-form-field>
+
+        <!-- Campo de Upload de PDF -->
+        <div class="full-width">
+          <label for="file">Upload de Documento (PDF)</label>
+          <input id="file" name="file" type="file" accept="application/pdf" (change)="onFileSelected($event)" >
+        </div>
+        <br>
         <div class="actions">
           <button mat-raised-button color="primary" type="submit" [disabled]="processoForm.invalid">
             {{isEdit ? 'Editar' : 'Salvar' }}

@@ -36,6 +36,7 @@ export class FormProcessoComponent implements OnInit {
       npu: ['', [Validators.required, Validators.maxLength(25)]],
       municipio: ['', [Validators.required]],
       uf: ['', [Validators.required, Validators.minLength(2)]],
+      file: [null]
     });
     this.carregarDados();
   }
@@ -82,5 +83,9 @@ export class FormProcessoComponent implements OnInit {
     }
     event.target.value = value;
     this.processoForm.get('npu')?.setValue(value);
+  }
+
+  onFileSelected($event:any){
+
   }
 }
