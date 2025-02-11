@@ -27,6 +27,10 @@ export class ProcessoService {
     return await firstValueFrom (this.http.get<Processo>(`${this.apiUrl}/${id}`));
   }
 
+  async findByNpu(npu: string): Promise<Processo> {
+    return await firstValueFrom (this.http.get<Processo>(`${this.apiUrl}/npu/${npu}`));
+  }
+
   async create(processo: Processo): Promise<Processo> {
     return await firstValueFrom (this.http.post<Processo>(this.apiUrl, processo));
   }

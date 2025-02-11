@@ -17,6 +17,7 @@ import com.desafio.fsbr.desafio_fsbr.repositories.UsuarioRepository;
 import com.desafio.fsbr.desafio_fsbr.utils.ConvertUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,15 @@ public class ProcessoService {
         repository.findById(id)
                 .orElseThrow(() -> new RuntimeException(PROCESSO_NAO_ENCONTRADO));
         return salvarContatoDto(processoDto);
+    }
+    
+    public ProcessoDTO findByNpu(String npu){
+        ProcessoDTO pdto = new ProcessoDTO();
+        Optional<Processo> p = repository.findByNpu(npu);
+        if(p.isPresent()){
+            pdto = convert.convertToDto(p.get());
+        }
+        return pdto;
     }
 
     public void excluir(Long id) {

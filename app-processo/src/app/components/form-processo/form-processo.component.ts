@@ -50,7 +50,7 @@ export class FormProcessoComponent implements OnInit {
     }
   }
 
-  salvar(): void {
+  async salvar(): Promise<void> {
     const formValues = this.processoForm.value;
     this.processo = formValues;
     this.processo.usuario_id = (this.processoService.getUsuarioLoguin()).id;
@@ -58,6 +58,11 @@ export class FormProcessoComponent implements OnInit {
       this.processo.id = this.processoService.processo?.id;
       this.processoService.update(this.processo.id!, this.processo).then(() => this.router.navigate(['/processos']));
     } else {
+      let result = await this.processoService.findByNpu(this.processo.npu);
+      if (result.id) {
+        alert("Numero do Processo já existe!");
+        return;
+      }
       this.processoService.create(this.processo).then(() => this.router.navigate(['/processos']));
     }
   }

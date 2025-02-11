@@ -72,4 +72,15 @@ public class ProcessoController {
     public ProcessoPaginadosDTO getContatosPaginadosEOrdenadosPorQuery(@Valid @RequestBody RequestPageDTO dto) {
         return service.getProcessosPaginadosEOrdenadosPorQuery(dto);
     }
+    
+    @GetMapping("/npu/{npu}")
+    public ResponseEntity<ProcessoDTO> findByNpu(@PathVariable String npu){
+        ProcessoDTO processoDto = new ProcessoDTO();
+        try {
+            processoDto = service.findByNpu(npu);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ProcessoDTO(), HttpStatus.BAD_GATEWAY);
+        }
+        return ResponseEntity.ok(processoDto);
+    }
 }
