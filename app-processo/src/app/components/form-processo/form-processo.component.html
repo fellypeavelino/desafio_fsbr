@@ -4,7 +4,7 @@
       <form [formGroup]="processoForm" (ngSubmit)="salvar()" class="vertical-form">
         <mat-form-field class="full-width">
           <mat-label>Numero</mat-label>
-          <input matInput formControlName="npu" required />
+          <input matInput formControlName="npu"  required (input)="formatNpu($event)" />
         </mat-form-field>
   
         <mat-form-field class="full-width">

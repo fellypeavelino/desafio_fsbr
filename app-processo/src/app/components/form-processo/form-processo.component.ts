@@ -70,4 +70,17 @@ export class FormProcessoComponent implements OnInit {
   cancelar(){
     this.router.navigate(['/processos']);
   }
+
+  formatNpu(event: any): void {
+    let value = event.target.value.replace(/\D/g, '');
+    if (value.length > 0) {
+      value = value.replace(/^(\d{7})(\d)/, '$1-$2');
+      value = value.replace(/^(\d{7})-(\d{2})(\d)/, '$1-$2.$3');
+      value = value.replace(/^(\d{7})-(\d{2}).(\d{4})(\d)/, '$1-$2.$3.$4');
+      value = value.replace(/^(\d{7})-(\d{2}).(\d{4}).(\d{1})(\d)/, '$1-$2.$3.$4.$5');
+      value = value.replace(/^(\d{7})-(\d{2}).(\d{4}).(\d{1}).(\d{2})(\d)/, '$1-$2.$3.$4.$5.$6');
+    }
+    event.target.value = value;
+    this.processoForm.get('npu')?.setValue(value);
+  }
 }
