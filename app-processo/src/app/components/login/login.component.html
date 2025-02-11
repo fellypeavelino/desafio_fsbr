@@ -1,0 +1,26 @@
+@if(usarLogout){
+    <section class="align-right">
+        <div class="button-logout">
+            <button mat-raised-button color="primary" (click)="logout()">
+              <mat-icon>logout</mat-icon> logout
+            </button>
+        </div>
+    </section> 
+}
+@if(!usarLogout){
+    <mat-card class="login-card">
+        <form [formGroup]="loginForm" (ngSubmit)="logar()" class="login-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Login</mat-label>
+            <input matInput formControlName="loguin" required>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Senha</mat-label>
+            <input matInput type="password" formControlName="senha" required>
+          </mat-form-field>
+          
+          <button mat-raised-button color="primary" type="submit" class="full-width">Login</button>
+        </form>
+    </mat-card>
+}

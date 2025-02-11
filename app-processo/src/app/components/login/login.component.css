@@ -1,0 +1,32 @@
+.align-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 16px;
+    margin-top: 6px;
+}
+
+.button-logout {
+    text-align: right;
+}
+  
+.login-card {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 10%;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+}
+
+.full-width {
+    width: 100%;
+}
