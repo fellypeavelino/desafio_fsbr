@@ -9,6 +9,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { Processo } from '../../models/processo.model';
 import { ProcessoService } from '../../servicies/processo.service';
 import { BrasilUfs } from '../../models/BrasilUfs.model';
+import { DocumentoPdf } from '../../models/documentoPdf.model';
 @Component({
   selector: 'app-form-processo',
   imports: [
@@ -25,6 +26,8 @@ export class FormProcessoComponent implements OnInit {
   processoForm!: FormGroup;
   brasilUfs:BrasilUfs = new BrasilUfs();
   listaMunicipios!:any[];
+  documentoPdf!: File;
+
   constructor(
     private fb: FormBuilder,
     private processoService: ProcessoService,
@@ -37,7 +40,7 @@ export class FormProcessoComponent implements OnInit {
       npu: ['', [Validators.required, Validators.maxLength(25)]],
       municipio: ['', [Validators.required]],
       uf: ['', [Validators.required, Validators.minLength(2)]],
-      file: [null]
+      documentosDto: [[]]
     });
     this.carregarDados();
   }
@@ -58,6 +61,7 @@ export class FormProcessoComponent implements OnInit {
     const formValues = this.processoForm.value;
     this.processo = formValues;
     this.processo.usuario_id = (this.processoService.getUsuarioLoguin()).id;
+    this.processo.documentosDto = this.processoForm.value.documentosDto || [];
     if (this.isEdit) {
       this.processo.id = this.processoService.processo?.id;
       this.processoService.update(this.processo.id!, this.processo).then(() => this.router.navigate(['/processos']));
@@ -88,9 +92,26 @@ export class FormProcessoComponent implements OnInit {
     this.processoForm.get('npu')?.setValue(value);
   }
 
-  onFileSelected($event:any){
-
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64String = (reader.result as string).split(',')[1]; 
+        
+        const documentoPdf: DocumentoPdf = {
+          path: file.name, 
+          documentoPdf: base64String 
+        };
+        
+        this.processoForm.patchValue({
+          documentosDto: [documentoPdf] 
+        });
+      };
+    }
   }
+  
 
   async ufSelecionada($event:any){
     const {value} = $event;
