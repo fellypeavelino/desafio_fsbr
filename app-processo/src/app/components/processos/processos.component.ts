@@ -45,7 +45,7 @@ export class ProcessosComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarParamPaginacao();
-    this.loadContatosPaginado();
+    this.loadProcessosPaginado();
   }
 
   carregarParamPaginacao(){
@@ -57,7 +57,7 @@ export class ProcessosComponent implements OnInit {
     this.paramPaginacao.filtro = "";
   }
 
-  loadContatosPaginado(): void {
+  loadProcessosPaginado(): void {
     const vm = this;
     vm.processoService.getPagination(vm.paramPaginacao).then(processos => {
       vm.carregarDataSourcePaginado(processos);
@@ -71,22 +71,43 @@ export class ProcessosComponent implements OnInit {
     this.paginator.pageIndex = jsonPaginate.param.page;
   }
 
-  criarProcesso(){}
+  criarProcesso(){
+    this.processoService.processo = null;
+    this.router.navigate([`processos/novo`]);
+  }
 
-  editarProcesso(processo:Processo){}
+  editarProcesso(processo:Processo){
+    this.processoService.processo = processo;
+    this.router.navigate([`processos/editar/${processo.id}`]);
+  }
 
-  excluirContato(id:number){}
+  excluirContato(id:number){
+    this.processoService.delete(id).then(() => this.loadProcessosPaginado());
+  }
 
-  applyFilterPaginado(event: Event) {}
+  applyFilterPaginado(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.paramPaginacao.filtro = filterValue.trim().toLowerCase();
+    this.loadProcessosPaginado();
+  }
 
   tabelaRenderizada($event:any){}
 
-  sortDataPaginado($event:any){}
+  sortDataPaginado(sort: Sort){
+    const {active, direction} = sort;
+    this.paramPaginacao.sortBy = active;
+    this.paramPaginacao.sortDir = direction;
+    this.loadProcessosPaginado();
+  }
 
   formatarData(data?: string): string {
     if (!data) return '';
     return new Date(data).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
   }
 
-  eventoPaginacao($event: PageEvent){}
+  eventoPaginacao($event: PageEvent){
+    this.paramPaginacao.page = $event.pageIndex;
+    this.paramPaginacao.size = $event.pageSize;
+    this.loadProcessosPaginado();
+  }
 }

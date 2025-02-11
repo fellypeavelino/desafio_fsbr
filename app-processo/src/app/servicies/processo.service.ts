@@ -9,7 +9,7 @@ import { ObjRequest } from '../models/objRequest.model';
 })
 export class ProcessoService {
   private apiUrl = '/api/processos'; 
-  public contato: Processo | null = null;
+  public processo: Processo | null = null;
   public token!: string;
   public usuarioLoguin: any;
 
