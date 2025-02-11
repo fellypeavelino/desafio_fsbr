@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { Usuario } from '../models/usuario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  async loguin(loguin: any): Promise<any> {
+  async loguin(loguin: any): Promise<Usuario> {
     return await firstValueFrom (this.http.post<any>(this.apiUrl, loguin));
   }
 

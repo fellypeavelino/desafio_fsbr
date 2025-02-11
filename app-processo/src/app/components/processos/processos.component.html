@@ -1,1 +1,86 @@
-<p>processos works!</p>
+<div class="container mt-4">
+    <h2>Lista de Processos</h2>
+    <div class="actions-header">
+      <button mat-raised-button color="primary" (click)="criarProcesso()">
+        <mat-icon>add</mat-icon> Novo Processo
+      </button>
+      &nbsp;
+      <mat-form-field class="example-form-field">
+        <mat-label>Filtrar</mat-label>
+        <input matInput (keyup)="applyFilterPaginado($event)" placeholder="Digite para filtrar" />
+      </mat-form-field>
+    </div>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" 
+    (contentChanged)="tabelaRenderizada($event)"
+    matSort (matSortChange)="sortDataPaginado($event)">
+  
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let processo"> {{ processo.id }} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="npu">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Numero </th>
+        <td mat-cell *matCellDef="let processo">{{ processo.npu }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="municipio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Municipio </th>
+        <td mat-cell *matCellDef="let processo">{{ processo.municipio }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="uf">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> UF </th>
+        <td mat-cell *matCellDef="let processo">{{ processo.uf }}</td>
+      </ng-container>
+  
+      <!-- <ng-container matColumnDef="snFavorito">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Favorito</th>
+        <td mat-cell *matCellDef="let contato">
+          <mat-icon class="{{contato.snFavorito === 'S' ? 'text-warning' : 'text-secondary'}}">
+            {{ contato.snFavorito === 'S' ? 'star' : 'star_outline' }}
+          </mat-icon>
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="snAtivo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ativo</th>
+        <td mat-cell *matCellDef="let contato">
+          <span class="badge" class="{{contato.snAtivo === 'S' ? 'bg-success' : 'bg-danger'}}">
+            {{ contato.snAtivo === 'S' ? 'Sim' : 'Não' }}
+          </span>
+        </td>
+      </ng-container> -->
+  
+      <ng-container matColumnDef="dataCadastro">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Data de Cadastro</th>
+        <td mat-cell *matCellDef="let processo">{{ formatarData(processo.dataCadastro) }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="dataVisualizacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Data de Visualização</th>
+        <td mat-cell *matCellDef="let processo">{{ formatarData(processo.dataVisualizacao) }}</td>
+      </ng-container>
+
+      <!-- Ações -->
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let processo">
+          <button mat-icon-button color="primary" (click)="editarProcesso(processo)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          &nbsp;
+          <button mat-icon-button color="warn" (click)="excluirContato(processo.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table> 
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" (page)="eventoPaginacao($event)"
+      showFirstLastButtons [length]="lengthPage"
+      aria-label="Select page of periodic elements">
+    </mat-paginator>
+</div>
