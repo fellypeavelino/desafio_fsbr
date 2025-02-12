@@ -105,7 +105,7 @@ export class FormProcessoComponent implements OnInit {
         const byteArray = new Uint8Array(e.target.result);
         const documentoPdf: DocumentoPdf = {
           path: file.name,
-          documentoPdf: Array.from(byteArray) // Converte Uint8Array para array normal
+          documentoPdf: Array.from(byteArray) 
         };
 
         this.processoForm.patchValue({
@@ -129,8 +129,8 @@ export class FormProcessoComponent implements OnInit {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `documento_${id}.pdf`; // Nome do arquivo
+    a.download = `documento_${id}.pdf`; 
     a.click();
-    window.URL.revokeObjectURL(url); // Libera o URL temporário
+    window.URL.revokeObjectURL(url); 
   }
 }
