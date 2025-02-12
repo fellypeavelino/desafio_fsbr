@@ -96,17 +96,21 @@ public class ProcessoService {
 
     public ProcessoDTO pesquisar(Long id) {
         Processo processo = this.findById(id);
-        //List<DocumentoPdf> documentos = documentoPdfRepository.findByProcesso(processo);
+        List<DocumentoPdf> documentos = documentoPdfRepository.findByProcesso(processo);
         //List<DocumentoPdf> documentos = documentoPdfRepository.findByProcessoId(id);
         List<DocumentoPdfDTO> documentosDto = new ArrayList<>();
-        List<Object[]> documentos = documentoPdfRepository.findDocumentosByProcessoId(id);
-        documentos.forEach(obj -> {;
-            DocumentoPdfDTO dto = new DocumentoPdfDTO(
-                ((Number) obj[0]).longValue(),  // id
-                (String) obj[1],               // path
-                ((Number) obj[2]).longValue(), // processoId
-                (byte[]) obj[3] // documentoPdf
-            );
+//        List<Object[]> documentos = documentoPdfRepository.findDocumentosByProcessoId(id);
+//        documentos.forEach(obj -> {;
+//            DocumentoPdfDTO dto = new DocumentoPdfDTO(
+//                ((Number) obj[0]).longValue(),  // id
+//                (String) obj[1],               // path
+//                ((Number) obj[2]).longValue(), // processoId
+//                (byte[]) obj[3] // documentoPdf
+//            );
+//            documentosDto.add(dto);
+//        });
+        documentos.forEach(obj -> {
+            DocumentoPdfDTO dto = convert.convertToDto(obj);
             documentosDto.add(dto);
         });
         ProcessoDTO processoDTO = convert.convertToDto(processo);
