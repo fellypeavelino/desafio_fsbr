@@ -14,7 +14,9 @@ import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,5 +63,23 @@ public class DocumentoPdfController {
             return new ResponseEntity<>(documentos, HttpStatus.BAD_GATEWAY);
         }
         return ResponseEntity.ok(documentos);
+    }
+    
+    @GetMapping("/download/{id}")
+    public ResponseEntity<ByteArrayResource> downloadPdf(@PathVariable Long id) {
+        Optional<DocumentoPdf> op = documentoPdfService.findById(id);
+        DocumentoPdf documentoPdf = new DocumentoPdf();
+        if (op.isPresent()) {
+            documentoPdf = op.get();
+        }
+        // Recuperar o conteúdo do PDF (byte[])
+        byte[] pdfBytes = documentoPdf.getDocumentoPdf();
+
+        // Criar um ByteArrayResource a partir dos bytes do PDF
+        ByteArrayResource resource = new ByteArrayResource(pdfBytes);
+        return ResponseEntity.ok()
+            .header("Content-Disposition", "attachment; filename="+documentoPdf.getPath())
+            .contentLength(pdfBytes.length)
+            .body(resource);
     }
 }

@@ -4,8 +4,6 @@
  */
 package com.desafio.fsbr.desafio_fsbr.dtos;
 
-import com.desafio.fsbr.desafio_fsbr.config.Base64Deserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 /**
@@ -31,7 +29,6 @@ public class DocumentoPdfDTO {
     
     private Long id;
     private String path;
-    //@JsonDeserialize(using = Base64Deserializer.class) // Converte Base64 para byte[]
     private byte[] documentoPdf;
     private Integer processo_id;
 }
