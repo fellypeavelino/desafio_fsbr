@@ -59,8 +59,8 @@ export class FormProcessoComponent implements OnInit {
 
   async salvar(): Promise<void> {
     const formValues = this.processoForm.value;
-    this.processo = formValues;
-    this.processo.usuario_id = (this.processoService.getUsuarioLoguin()).id;
+    this.processo = { ...this.processo, ...formValues };
+    this.processo.usuario_id = this.processoService.getUsuarioLoguin().id;
     this.processo.documentosDto = this.processoForm.value.documentosDto || [];
     if (this.isEdit) {
       this.processo.id = this.processoService.processo?.id;
@@ -96,18 +96,19 @@ export class FormProcessoComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const base64String = (reader.result as string).split(',')[1]; 
-        
+      reader.readAsArrayBuffer(file);
+      reader.onload = (e: any) => {
+        const byteArray = new Uint8Array(e.target.result);
         const documentoPdf: DocumentoPdf = {
-          path: file.name, 
-          documentoPdf: base64String 
+          path: file.name,
+          documentoPdf: Array.from(byteArray) // Converte Uint8Array para array normal
         };
-        
+
         this.processoForm.patchValue({
-          documentosDto: [documentoPdf] 
+          documentosDto: [documentoPdf]
         });
+
+        console.log("Arquivo carregado:", documentoPdf);
       };
     }
   }
@@ -117,6 +118,5 @@ export class FormProcessoComponent implements OnInit {
     const {value} = $event;
     let list = await this.processoService.carregarMunicipiosPelaUf(value);
     this.listaMunicipios = list;
-    console.log(list);
   }
 }

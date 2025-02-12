@@ -31,4 +31,9 @@ public class ConvertUtil {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(documentoPdf, DocumentoPdfDTO.class);
     }
+    
+    public DocumentoPdf convertToEntity(DocumentoPdfDTO documentoPdfDto) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(documentoPdfDto, DocumentoPdf.class);
+    }
 }

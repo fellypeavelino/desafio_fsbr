@@ -50,7 +50,7 @@ public class ProcessoController {
         }
         return ResponseEntity.ok(processoDto);
     }
-
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
         service.excluir(id);
@@ -63,6 +63,7 @@ public class ProcessoController {
         try {
             processoDto = service.pesquisar(id);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(new ProcessoDTO(), HttpStatus.BAD_GATEWAY);
         }
         return ResponseEntity.ok(processoDto);

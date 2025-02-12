@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +35,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ProcessoService {
+    
+    private static final Logger logger = LoggerFactory.getLogger(ProcessoService.class);
     
     private static final String PROCESSO_NAO_ENCONTRADO = "Processo não encontrado";
     
@@ -64,7 +68,13 @@ public class ProcessoService {
     public ProcessoDTO alterarDto(Long id, ProcessoDTO processoDto) {
         repository.findById(id)
                 .orElseThrow(() -> new RuntimeException(PROCESSO_NAO_ENCONTRADO));
-        return salvarContatoDto(processoDto);
+        ProcessoDTO pdto = salvarContatoDto(processoDto);
+        for (DocumentoPdfDTO documentoPdfDTO : processoDto.getDocumentosDto()) {
+            DocumentoPdf doc = convert.convertToEntity(documentoPdfDTO);
+            doc.setProcesso(convert.convertToEntity(pdto));
+            documentoPdfRepository.save(doc);
+        }
+        return pdto;
     }
     
     public ProcessoDTO findByNpu(String npu){
@@ -82,10 +92,22 @@ public class ProcessoService {
 
     public ProcessoDTO pesquisar(Long id) {
         Processo processo = this.findById(id);
-        List<DocumentoPdf> documentos = documentoPdfRepository.findByProcesso(processo);
-        List<DocumentoPdfDTO> documentosDto = documentos.stream()
-            .map(o -> convert.convertToDto(o))
-            .collect(Collectors.toList());
+        //List<DocumentoPdf> documentos = documentoPdfRepository.findByProcesso(processo);
+        //List<DocumentoPdf> documentos = documentoPdfRepository.findByProcessoId(id);
+        List<DocumentoPdfDTO> documentosDto = new ArrayList<>();
+        List<Object[]> documentos = documentoPdfRepository.findDocumentosByProcessoId(id);
+        documentos.forEach(obj -> {;
+            DocumentoPdfDTO dto = new DocumentoPdfDTO(
+                ((Number) obj[0]).longValue(),  // id
+                (String) obj[1],               // path
+                ((Number) obj[2]).longValue(), // processoId
+                obj[3] instanceof byte[] ? (byte[]) obj[3] : null // documentoPdf
+            );
+            documentosDto.add(dto);
+        });
+//        List<DocumentoPdfDTO> documentosDto = documentos.stream()
+//            .map(o -> convert.convertToDto(o))
+//            .collect(Collectors.toList());
         ProcessoDTO processoDTO = convert.convertToDto(processo);
         processoDTO.setDocumentosDto(documentosDto);
         return processoDTO;

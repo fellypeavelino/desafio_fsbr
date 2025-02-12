@@ -4,8 +4,10 @@
  */
 package com.desafio.fsbr.desafio_fsbr.entities;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,6 +31,7 @@ public class DocumentoPdf {
     @Column(name = "local_pdf")
     private String path;
     @Lob
+    //@Basic(fetch = FetchType.LAZY)
     @Column(name = "documento_pdf")
     private byte[] documentoPdf;
     @ManyToOne

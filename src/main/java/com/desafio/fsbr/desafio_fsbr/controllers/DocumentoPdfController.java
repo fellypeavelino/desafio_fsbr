@@ -9,6 +9,7 @@ import com.desafio.fsbr.desafio_fsbr.dtos.RequestUploadDocumentoPdfDTO;
 import com.desafio.fsbr.desafio_fsbr.entities.DocumentoPdf;
 import com.desafio.fsbr.desafio_fsbr.entities.Processo;
 import com.desafio.fsbr.desafio_fsbr.services.DocumentoPdfService;
+import com.desafio.fsbr.desafio_fsbr.services.ProcessoService;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +37,9 @@ public class DocumentoPdfController {
     @Autowired
     private DocumentoPdfService documentoPdfService;
     
+    @Autowired
+    private ProcessoService processoService;
+    
     @PostMapping
     public ResponseEntity<DocumentoPdfDTO> uploadFile(@Valid @RequestBody RequestUploadDocumentoPdfDTO request) throws IOException {
         DocumentoPdfDTO documentoPdf = new DocumentoPdfDTO();
@@ -48,9 +52,10 @@ public class DocumentoPdfController {
     }
     
     @GetMapping("/processo/{processoId}")
-    public ResponseEntity<List<DocumentoPdfDTO>> getDocumentosByProcesso(@PathVariable Processo processo) {
+    public ResponseEntity<List<DocumentoPdfDTO>> getDocumentosByProcesso(@PathVariable Long processo_id) {
         List<DocumentoPdfDTO> documentos = new ArrayList<>();
         try {
+            Processo processo = processoService.findById(processo_id);
             documentos = documentoPdfService.findByProcesso(processo);
         } catch (Exception e) {
             return new ResponseEntity<>(documentos, HttpStatus.BAD_GATEWAY);
