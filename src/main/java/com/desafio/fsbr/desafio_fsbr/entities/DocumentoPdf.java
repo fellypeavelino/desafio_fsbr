@@ -31,7 +31,7 @@ public class DocumentoPdf {
     @Column(name = "local_pdf")
     private String path;
     @Lob
-    //@Basic(fetch = FetchType.LAZY)
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "documento_pdf")
     private byte[] documentoPdf;
     @ManyToOne

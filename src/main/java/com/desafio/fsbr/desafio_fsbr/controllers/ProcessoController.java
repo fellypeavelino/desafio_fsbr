@@ -34,8 +34,9 @@ public class ProcessoController {
     @PostMapping
     public ResponseEntity<ProcessoDTO> salvar(@RequestBody @Valid ProcessoDTO processoDto) {
         try {
-            processoDto = service.salvarContatoDto(processoDto);
+            processoDto = service.salvarProcessoDto(processoDto);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(new ProcessoDTO(), HttpStatus.BAD_GATEWAY);
         }
         return ResponseEntity.ok(processoDto);

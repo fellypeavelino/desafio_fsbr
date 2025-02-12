@@ -40,7 +40,7 @@ export class FormProcessoComponent implements OnInit {
       npu: ['', [Validators.required, Validators.maxLength(25)]],
       municipio: ['', [Validators.required]],
       uf: ['', [Validators.required, Validators.minLength(2)]],
-      documentosDto: [[]]
+      documentosDto: [[], Validators.required]
     });
     this.carregarDados();
   }

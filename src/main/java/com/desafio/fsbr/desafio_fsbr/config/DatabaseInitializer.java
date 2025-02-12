@@ -25,6 +25,8 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        //ALTER TABLE documento_pdf
+        //MODIFY COLUMN documento_pdf LONGBLOB;
         if (usuarioRepository.count() == 0) {
             Usuario defaultUsuario = new Usuario();
             defaultUsuario.setLoguin("admin");

@@ -52,28 +52,28 @@ public class ProcessoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
     
-    public Processo salvarContato(Processo contato, Long usuarioId) {
+    public Processo salvarProcesso(Processo contato, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         contato.setUsuario(usuario);
         return repository.save(contato);
     }
 
-    public ProcessoDTO salvarContatoDto(ProcessoDTO processoDto) {
+    public ProcessoDTO salvarProcessoDto(ProcessoDTO processoDto) {
         Processo processo = convert.convertToEntity(processoDto);
-        processo = salvarContato(processo, processoDto.getUsuario_id());
+        processo = salvarProcesso(processo, processoDto.getUsuario_id());
+        for (DocumentoPdfDTO documentoPdfDTO : processoDto.getDocumentosDto()) {
+            DocumentoPdf doc = convert.convertToEntity(documentoPdfDTO);
+            doc.setProcesso(processo);
+            documentoPdfRepository.save(doc);
+        }
         return convert.convertToDto(processo);
     }
 
     public ProcessoDTO alterarDto(Long id, ProcessoDTO processoDto) {
         repository.findById(id)
                 .orElseThrow(() -> new RuntimeException(PROCESSO_NAO_ENCONTRADO));
-        ProcessoDTO pdto = salvarContatoDto(processoDto);
-        for (DocumentoPdfDTO documentoPdfDTO : processoDto.getDocumentosDto()) {
-            DocumentoPdf doc = convert.convertToEntity(documentoPdfDTO);
-            doc.setProcesso(convert.convertToEntity(pdto));
-            documentoPdfRepository.save(doc);
-        }
+        ProcessoDTO pdto = salvarProcessoDto(processoDto);
         return pdto;
     }
     
@@ -101,13 +101,10 @@ public class ProcessoService {
                 ((Number) obj[0]).longValue(),  // id
                 (String) obj[1],               // path
                 ((Number) obj[2]).longValue(), // processoId
-                obj[3] instanceof byte[] ? (byte[]) obj[3] : null // documentoPdf
+                (byte[]) obj[3] // documentoPdf
             );
             documentosDto.add(dto);
         });
-//        List<DocumentoPdfDTO> documentosDto = documentos.stream()
-//            .map(o -> convert.convertToDto(o))
-//            .collect(Collectors.toList());
         ProcessoDTO processoDTO = convert.convertToDto(processo);
         processoDTO.setDocumentosDto(documentosDto);
         return processoDTO;
