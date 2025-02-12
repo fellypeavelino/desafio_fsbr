@@ -15,6 +15,7 @@ import com.desafio.fsbr.desafio_fsbr.repositories.DocumentoPdfRepository;
 import com.desafio.fsbr.desafio_fsbr.repositories.ProcessoRepository;
 import com.desafio.fsbr.desafio_fsbr.repositories.UsuarioRepository;
 import com.desafio.fsbr.desafio_fsbr.utils.ConvertUtil;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,11 +53,11 @@ public class ProcessoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
     
-    public Processo salvarProcesso(Processo contato, Long usuarioId) {
+    public Processo salvarProcesso(Processo processo, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        contato.setUsuario(usuario);
-        return repository.save(contato);
+        processo.setUsuario(usuario);
+        return repository.save(processo);
     }
 
     public ProcessoDTO salvarProcessoDto(ProcessoDTO processoDto) {
@@ -146,5 +147,16 @@ public class ProcessoService {
         List<ProcessoDTO> listResult = new ArrayList<>();
         contatos.forEach(c -> listResult.add(convert.convertToDto(c)));
         return listResult;
+    }
+    
+    public ProcessoDTO visualizacao(Long id){
+        Optional<Processo> op = repository.findById(id);
+        Processo processo = new Processo();
+        if (op.isPresent()) {
+            processo = op.get();
+            processo.setDataVisualizacao(LocalDateTime.now());
+            repository.save(processo);
+        }
+        return convert.convertToDto(processo);
     }
 }

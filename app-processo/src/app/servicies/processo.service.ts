@@ -27,6 +27,10 @@ export class ProcessoService {
     return await firstValueFrom (this.http.get<Processo>(`${this.apiUrl}/${id}`));
   }
 
+  async visualizacao(id: number): Promise<Processo> {
+    return await firstValueFrom (this.http.get<Processo>(`${this.apiUrl}/visualizacao/${id}`));
+  }
+
   async download(id: number): Promise<Blob> {
     return await firstValueFrom (this.http.get(`/api/documentos/download/${id}`, { responseType: 'blob' }));
   }

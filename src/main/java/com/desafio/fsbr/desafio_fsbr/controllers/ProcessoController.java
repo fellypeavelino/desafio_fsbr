@@ -85,4 +85,15 @@ public class ProcessoController {
         }
         return ResponseEntity.ok(processoDto);
     }
+    
+    @GetMapping("/visualizacao/{id}")
+    public ResponseEntity<ProcessoDTO> visualizacao(@PathVariable Long id){
+        ProcessoDTO processoDto = new ProcessoDTO();
+        try {
+            processoDto = service.visualizacao(id);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ProcessoDTO(), HttpStatus.BAD_GATEWAY);
+        }
+        return ResponseEntity.ok(processoDto);
+    }
 }

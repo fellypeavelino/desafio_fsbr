@@ -58,6 +58,7 @@ export class FormProcessoComponent implements OnInit {
       this.processoForm.get('uf')?.setValue(this.processo.uf);
       await this.ufSelecionada({value:this.processo.uf});
       this.processoForm.get('municipio')?.setValue(this.processo.municipio);
+      await this.processoService.visualizacao(+id);
     }
   }
 
