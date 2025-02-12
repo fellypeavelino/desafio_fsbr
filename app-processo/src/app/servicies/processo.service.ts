@@ -27,6 +27,10 @@ export class ProcessoService {
     return await firstValueFrom (this.http.get<Processo>(`${this.apiUrl}/${id}`));
   }
 
+  async download(id: number): Promise<Blob> {
+    return await firstValueFrom (this.http.get(`/api/documentos/download/${id}`, { responseType: 'blob' }));
+  }
+
   async findByNpu(npu: string): Promise<Processo> {
     return await firstValueFrom (this.http.get<Processo>(`${this.apiUrl}/npu/${npu}`));
   }

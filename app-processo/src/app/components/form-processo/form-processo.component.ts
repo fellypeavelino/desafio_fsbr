@@ -10,11 +10,13 @@ import { Processo } from '../../models/processo.model';
 import { ProcessoService } from '../../servicies/processo.service';
 import { BrasilUfs } from '../../models/BrasilUfs.model';
 import { DocumentoPdf } from '../../models/documentoPdf.model';
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-form-processo',
   imports: [
     MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSelectModule, MatCardModule, ReactiveFormsModule
+    MatSelectModule, MatCardModule, ReactiveFormsModule,
+    MatIconModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './form-processo.component.html',
@@ -27,6 +29,7 @@ export class FormProcessoComponent implements OnInit {
   brasilUfs:BrasilUfs = new BrasilUfs();
   listaMunicipios!:any[];
   documentoPdf!: File;
+  listaDocs: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -50,6 +53,7 @@ export class FormProcessoComponent implements OnInit {
     if (id) {
       this.isEdit = true;
       await this.processoService.getById(+id).then(data => this.processo = data);
+      this.listaDocs = this.processo.documentosDto;
       this.processoForm.patchValue(this.processo);
       this.processoForm.get('uf')?.setValue(this.processo.uf);
       await this.ufSelecionada({value:this.processo.uf});
@@ -113,10 +117,20 @@ export class FormProcessoComponent implements OnInit {
     }
   }
   
-
   async ufSelecionada($event:any){
     const {value} = $event;
     let list = await this.processoService.carregarMunicipiosPelaUf(value);
     this.listaMunicipios = list;
+  }
+
+  async download(id:number){
+    let pdfBlob = await this.processoService.download(id);
+    const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `documento_${id}.pdf`; // Nome do arquivo
+    a.click();
+    window.URL.revokeObjectURL(url); // Libera o URL temporário
   }
 }

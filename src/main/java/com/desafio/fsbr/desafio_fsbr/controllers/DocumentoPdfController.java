@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,7 +80,8 @@ public class DocumentoPdfController {
         // Criar um ByteArrayResource a partir dos bytes do PDF
         ByteArrayResource resource = new ByteArrayResource(pdfBytes);
         return ResponseEntity.ok()
-            .header("Content-Disposition", "attachment; filename="+documentoPdf.getPath())
+            .contentType(MediaType.APPLICATION_PDF)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+documentoPdf.getPath())
             .contentLength(pdfBytes.length)
             .body(resource);
     }

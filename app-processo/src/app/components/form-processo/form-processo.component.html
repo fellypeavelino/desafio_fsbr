@@ -24,6 +24,13 @@
             }
             </mat-select>
         </mat-form-field>
+        <div class="full-width">
+          @for(item of listaDocs; track item.id){
+            <button mat-fab (click)="download(item.id)">
+              <mat-icon>picture_as_pdf</mat-icon>
+            </button>
+          }
+        </div>
         <!-- Campo de Upload de PDF -->
         <div class="full-width">
           <label for="documentosDto">Upload de Documento (PDF)</label>
