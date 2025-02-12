@@ -32,7 +32,7 @@ public class DocumentoPdf {
     private String path;
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "documento_pdf")
+    @Column(name = "documento_pdf", columnDefinition = "LONGBLOB")
     private byte[] documentoPdf;
     @ManyToOne
     @JoinColumn(name = "processo_id", nullable = false)

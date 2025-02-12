@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  *
@@ -22,11 +23,12 @@ public class DatabaseInitializer implements CommandLineRunner {
     
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public void run(String... args) throws Exception {
-        //ALTER TABLE documento_pdf
-        //MODIFY COLUMN documento_pdf LONGBLOB;
         if (usuarioRepository.count() == 0) {
             Usuario defaultUsuario = new Usuario();
             defaultUsuario.setLoguin("admin");
@@ -36,6 +38,14 @@ public class DatabaseInitializer implements CommandLineRunner {
         } else {
             logger.warn("Usuários já existentes no banco de dados.");
         }
+        
+        // Execução das queries de alteração na tabela
+//        try {
+//            jdbcTemplate.execute("ALTER TABLE documento_pdf MODIFY COLUMN documento_pdf LONGBLOB;");
+//            logger.info("Alteração da tabela 'documento_pdf' aplicada com sucesso.");
+//        } catch (Exception e) {
+//            logger.error("Erro ao alterar a tabela 'documento_pdf': ", e);
+//        }
     }
     
 }
