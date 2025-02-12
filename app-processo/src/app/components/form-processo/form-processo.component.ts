@@ -43,7 +43,7 @@ export class FormProcessoComponent implements OnInit {
       npu: ['', [Validators.required, Validators.maxLength(25)]],
       municipio: ['', [Validators.required]],
       uf: ['', [Validators.required, Validators.minLength(2)]],
-      documentosDto: [[], Validators.required]
+      documentosDto: [[]]
     });
     this.carregarDados();
   }
@@ -73,6 +73,11 @@ export class FormProcessoComponent implements OnInit {
       let result = await this.processoService.findByNpu(this.processo.npu);
       if (result.id) {
         alert("Numero do Processo já existe!");
+        return;
+      }
+      let documentosDto = this.processoForm.get('documentosDto')?.value;
+      if (documentosDto && documentosDto.length == 0) {
+        alert("Necessario Anexar um PDF!");
         return;
       }
       this.processoService.create(this.processo).then(() => this.router.navigate(['/processos']));
