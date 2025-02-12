@@ -29,6 +29,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -87,7 +88,9 @@ public class ProcessoService {
         return pdto;
     }
 
+    @Transactional
     public void excluir(Long id) {
+        documentoPdfRepository.deleteByProcessoId(id);
         repository.deleteById(id);
     }
 

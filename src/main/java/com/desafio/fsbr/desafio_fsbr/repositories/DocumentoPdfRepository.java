@@ -8,6 +8,7 @@ import com.desafio.fsbr.desafio_fsbr.entities.DocumentoPdf;
 import com.desafio.fsbr.desafio_fsbr.entities.Processo;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,4 +24,8 @@ public interface DocumentoPdfRepository extends JpaRepository<DocumentoPdf,Long>
     
     @Query(value = "SELECT id, local_pdf, processo_id, documento_pdf FROM documento_pdf WHERE processo_id = :processoId", nativeQuery = true)
     List<Object[]> findDocumentosByProcessoId(@Param("processoId") Long processoId);
+    
+//    @Modifying
+//    @Query("DELETE FROM DocumentoPdf d WHERE d.processo.id = :processoId")
+    void deleteByProcessoId(Long processoId);
 }
