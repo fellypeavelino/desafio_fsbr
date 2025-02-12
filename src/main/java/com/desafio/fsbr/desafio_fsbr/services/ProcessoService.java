@@ -157,6 +157,6 @@ public class ProcessoService {
             processo.setDataVisualizacao(LocalDateTime.now());
             repository.save(processo);
         }
-        return convert.convertToDto(processo);
+        return pesquisar(id);
     }
 }

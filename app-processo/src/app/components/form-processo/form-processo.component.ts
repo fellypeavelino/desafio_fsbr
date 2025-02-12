@@ -52,13 +52,13 @@ export class FormProcessoComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEdit = true;
-      await this.processoService.getById(+id).then(data => this.processo = data);
+      await this.processoService.visualizacao(+id).then(data => this.processo = data);
       this.listaDocs = this.processo.documentosDto;
       this.processoForm.patchValue(this.processo);
       this.processoForm.get('uf')?.setValue(this.processo.uf);
       await this.ufSelecionada({value:this.processo.uf});
       this.processoForm.get('municipio')?.setValue(this.processo.municipio);
-      await this.processoService.visualizacao(+id);
+      //await this.processoService.visualizacao(+id);
     }
   }
 
