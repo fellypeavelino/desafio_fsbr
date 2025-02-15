@@ -142,7 +142,11 @@ A documentação da API pode ser acessada via Swagger na seguinte URL:
    - **Login:** `admin`
    - **Senha:** `admin123`
 
-### Banco de Dados 
+### Banco de Dados esta no Docker Compose
 
-1. Necessario Banco de Dados Mysql.
-2. Configuração para conexção com o banco são feitas no application.properties no spring boot
+1. Certifique-se de ter o Docker e o Docker Compose instalados.
+2. Na raiz do projeto, execute o seguinte comando para subir o banco de dados MYSQL:
+   ```sh
+   docker-compose up -d
+   ```
+3. O banco de dados estará disponível para conexão.
